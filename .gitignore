@@ -1,0 +1,69 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+
+# Virtual Environment
+venv/
+.venv/
+env/
+.env
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Local config (keep .env.example but ignore actual .env)
+backend/.env
+
+# Cache
+.cache/
+*.cache
+
+# Test
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Temporary files
+*.tmp
+*.temp
+tmp/
+temp/
+
+# Generated reports
+*.pdf
+reports/
+
+# Node (if using any JS build tools)
+node_modules/
+
+# Jupyter (if any)
+.ipynb_checkpoints/
+
+# Electron Desktop App
+desktop/node_modules/
+desktop/dist/
+desktop/out/
+*.exe
+!desktop/assets/*.ico

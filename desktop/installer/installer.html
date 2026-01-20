@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self';">
+    <title>Gap Filler - Setup Wizard</title>
+    <link rel="stylesheet" href="installer.css">
+</head>
+
+<body>
+    <div class="installer-container">
+        <!-- Header -->
+        <div class="installer-header">
+            <div class="logo">
+                <span class="logo-icon">🧬</span>
+                <span class="logo-text">Gap Filler</span>
+            </div>
+            <div class="version">v1.0.0</div>
+        </div>
+
+        <!-- Steps Indicator -->
+        <div class="steps-indicator">
+            <div class="step active" data-step="1">
+                <div class="step-number">1</div>
+                <div class="step-label">Hoş Geldiniz</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" data-step="2">
+                <div class="step-number">2</div>
+                <div class="step-label">Bağımlılıklar</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" data-step="3">
+                <div class="step-number">3</div>
+                <div class="step-label">Kurulum</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" data-step="4">
+                <div class="step-number">4</div>
+                <div class="step-label">Tamamlandı</div>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="installer-content">
+            <!-- Step 1: Welcome -->
+            <div class="step-content active" id="step-1">
+                <h1>Gap Filler'a Hoş Geldiniz! 🌱</h1>
+                <p class="description">
+                    Plant Genomics Literature Gap Finder uygulamasını kurulum
+                    sihirbazı size rehberlik edecek.
+                </p>
+                <div class="features-list">
+                    <div class="feature">
+                        <span class="feature-icon">📚</span>
+                        <span>PubMed Literature Tarama</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">🔬</span>
+                        <span>Ortholog Gap Analizi</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">🤖</span>
+                        <span>AI-Destekli Araştırma Önerileri</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">💰</span>
+                        <span>Funding Fırsat Eşleştirme</span>
+                    </div>
+                </div>
+                <div class="info-box">
+                    <span class="info-icon">ℹ️</span>
+                    <span>Bu uygulama, yerel LLM desteği için <strong>Ollama</strong> kullanır.</span>
+                </div>
+            </div>
+
+            <!-- Step 2: Dependencies Check -->
+            <div class="step-content" id="step-2">
+                <h1>Sistem Gereksinimleri 🔍</h1>
+                <p class="description">
+                    Uygulamanın çalışması için gerekli bileşenler kontrol ediliyor...
+                </p>
+                <div class="dependency-list">
+                    <div class="dependency" id="dep-ollama">
+                        <div class="dep-icon">
+                            <span class="spinner"></span>
+                        </div>
+                        <div class="dep-info">
+                            <div class="dep-name">Ollama</div>
+                            <div class="dep-status">Kontrol ediliyor...</div>
+                        </div>
+                    </div>
+                    <div class="dependency" id="dep-model">
+                        <div class="dep-icon">
+                            <span class="pending">⏳</span>
+                        </div>
+                        <div class="dep-info">
+                            <div class="dep-name">LLM Model</div>
+                            <div class="dep-status" id="model-name">Bekliyor...</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="action-info" id="action-info" style="display: none;">
+                    <div class="action-title"></div>
+                    <div class="action-desc"></div>
+                </div>
+            </div>
+
+            <!-- Step 3: Installation -->
+            <div class="step-content" id="step-3">
+                <h1>Kurulum İşlemi 📥</h1>
+                <p class="description" id="install-description">
+                    Eksik bileşenler yükleniyor...
+                </p>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <div class="progress-text" id="progress-text">Hazırlanıyor...</div>
+                </div>
+                <div class="install-log" id="install-log">
+                    <!-- Installation steps will appear here -->
+                </div>
+            </div>
+
+            <!-- Step 4: Complete -->
+            <div class="step-content" id="step-4">
+                <h1>Kurulum Tamamlandı! 🎉</h1>
+                <p class="description">
+                    Gap Filler başarıyla kuruldu ve kullanıma hazır!
+                </p>
+                <div class="success-icon">✅</div>
+                <div class="ready-info">
+                    <div class="ready-item">
+                        <span class="check">✓</span>
+                        <span>Ollama çalışıyor</span>
+                    </div>
+                    <div class="ready-item">
+                        <span class="check">✓</span>
+                        <span>LLM modeli yüklendi</span>
+                    </div>
+                    <div class="ready-item">
+                        <span class="check">✓</span>
+                        <span>Backend hazır</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer with Buttons -->
+        <div class="installer-footer">
+            <button class="btn btn-secondary" id="btn-back" style="visibility: hidden;">
+                ← Geri
+            </button>
+            <button class="btn btn-primary" id="btn-next">
+                Başla →
+            </button>
+        </div>
+    </div>
+
+    <script src="installer.js"></script>
+</body>
+
+</html>

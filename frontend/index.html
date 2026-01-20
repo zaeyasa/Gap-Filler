@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAP Filler - Plant Genomics Gap Finder</title>
+    <meta name="description"
+        content="Identify research gaps in plant genomics by analyzing genome-wide analysis articles">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🧬</span>
+                    <h1>GAP Filler</h1>
+                </div>
+                <p class="tagline">Plant Genomics Literature Gap Finder</p>
+            </div>
+            <div class="header-actions">
+                <!-- Search History Dropdown -->
+                <div class="search-history-dropdown" id="search-history-dropdown">
+                    <button class="history-btn" onclick="toggleSearchHistory()">
+                        <span>📋</span> History
+                    </button>
+                    <div class="history-menu" id="history-menu" style="display: none;">
+                        <div class="history-header">
+                            <span>Recent Searches</span>
+                            <button onclick="clearSearchHistory()" class="clear-history-btn">Clear</button>
+                        </div>
+                        <div class="history-list" id="history-list">
+                            <!-- Dynamically populated -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Theme Toggle -->
+                <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+                    <span class="theme-icon" id="theme-icon">🌙</span>
+                </button>
+
+                <!-- Status Indicator -->
+                <div class="status-indicator" id="status-indicator">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Connecting...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Settings Panel -->
+            <aside class="settings-panel">
+                <h2>⚙️ Settings</h2>
+
+                <div class="setting-group">
+                    <label for="model-select">LLM Model</label>
+                    <select id="model-select" class="select-input">
+                        <option value="">Loading models...</option>
+                    </select>
+                    <small>Select the Ollama model for gene extraction</small>
+                </div>
+
+                <div class="setting-group">
+                    <label for="source-species">Source Species</label>
+                    <select id="source-species" class="select-input">
+                        <option value="">Loading species...</option>
+                    </select>
+                    <small>Species with characterized genes</small>
+                </div>
+
+                <div class="setting-group">
+                    <label>Target Species (check for gaps)</label>
+                    <div class="species-checkboxes" id="target-species">
+                        <!-- Dynamically populated -->
+                    </div>
+                    <button id="select-all-btn" class="btn-small">Select All</button>
+                    <button id="deselect-all-btn" class="btn-small">Deselect All</button>
+                </div>
+
+                <div class="setting-group">
+                    <label for="max-articles">Max Articles</label>
+                    <input type="number" id="max-articles" class="number-input" value="20" min="1" max="100">
+                    <small>Number of articles to analyze</small>
+                </div>
+
+                <!-- v3.0 Tools Section -->
+                <div class="tools-divider"></div>
+                <h3 class="tools-header">🛠️ Analysis Tools</h3>
+
+                <!-- Funding Matcher -->
+                <div class="tool-section" id="funding-section">
+                    <div class="tool-header" onclick="toggleToolSection('funding-section')">
+                        <span>💰 Funding Opportunities</span>
+                        <span class="tool-toggle">▼</span>
+                    </div>
+                    <div class="tool-content" id="funding-content" style="display: none;">
+                        <p class="tool-desc">Search NIH grants related to your gene research</p>
+                        <div id="funding-gene-display" class="selected-gene-display">
+                            <em>👆 Click the 🎯 button on any gene gap to select it first</em>
+                        </div>
+                        <a id="nih-reporter-link" href="https://reporter.nih.gov/" target="_blank" class="btn-tool"
+                            style="display: inline-block; text-align: center; text-decoration: none;">
+                            🔗 Search NIH RePORTER
+                        </a>
+                        <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 8px;">
+                            📋 Gene name is auto-copied when you click! Just Ctrl+V to paste on RePORTER.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Research Proposal Generator -->
+                <div class="tool-section" id="proposal-section">
+                    <div class="tool-header" onclick="toggleToolSection('proposal-section')">
+                        <span>📝 Research Proposal</span>
+                        <span class="tool-toggle">▼</span>
+                    </div>
+                    <div class="tool-content" id="proposal-content" style="display: none;">
+                        <p class="tool-desc">Generate AI proposal for selected gene gap</p>
+                        <div id="proposal-gene-display" class="selected-gene-display">
+                            <em>👆 Click the 🎯 button on any gene gap to select it first</em>
+                        </div>
+                        <div class="proposal-options">
+                            <label>
+                                <input type="radio" name="proposal-length" value="short" checked> Short
+                            </label>
+                            <label>
+                                <input type="radio" name="proposal-length" value="medium"> Medium
+                            </label>
+                            <label>
+                                <input type="radio" name="proposal-length" value="full"> Full
+                            </label>
+                        </div>
+                        <button id="generate-proposal-btn" class="btn-tool btn-primary-tool" disabled>
+                            ✨ Generate Proposal
+                        </button>
+                        <div id="proposal-results" class="tool-results">
+                            <!-- Dynamically populated -->
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Search & Results Area -->
+            <section class="content-area">
+                <!-- Search Bar -->
+                <div class="search-section">
+                    <div class="search-bar">
+                        <input type="text" id="search-input" class="search-input"
+                            placeholder="Enter search query (e.g., drought stress, flowering time, salt tolerance...)">
+                        <button id="search-btn" class="btn-primary">
+                            <span class="btn-icon">🔍</span>
+                            Analyze Gaps
+                        </button>
+                    </div>
+                    <div class="search-hints">
+                        <span class="hint-label">Try:</span>
+                        <button class="hint-tag" data-query="drought stress">drought stress</button>
+                        <button class="hint-tag" data-query="flowering time">flowering time</button>
+                        <button class="hint-tag" data-query="salt tolerance">salt tolerance</button>
+                        <button class="hint-tag" data-query="disease resistance">disease resistance</button>
+                    </div>
+                </div>
+
+                <!-- Loading State -->
+                <div class="loading-state" id="loading-state" style="display: none;">
+                    <div class="loader"></div>
+                    <p id="loading-text">Searching PubMed...</p>
+                </div>
+
+                <!-- Results Container -->
+                <div class="results-container" id="results-container" style="display: none;">
+                    <!-- Statistics Cards -->
+                    <div class="stats-grid" id="stats-grid">
+                        <!-- Dynamically populated -->
+                    </div>
+
+                    <!-- Tabs -->
+                    <div class="tabs">
+                        <div class="tabs-left">
+                            <button class="tab active" data-tab="gaps">🔬 Gaps Found</button>
+                            <button class="tab" data-tab="genes">🧬 Genes Identified</button>
+                            <button class="tab" data-tab="summaries">📖 Gene Summaries</button>
+                        </div>
+                        <div class="tabs-right">
+                            <button id="export-pdf-btn" class="btn-export" onclick="exportPDF()">
+                                📄 Export PDF
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Tab Content: Gaps -->
+                    <div class="tab-content active" id="tab-gaps">
+                        <div class="gaps-list" id="gaps-list">
+                            <!-- Dynamically populated -->
+                        </div>
+                    </div>
+
+                    <!-- Tab Content: Genes -->
+                    <div class="tab-content" id="tab-genes">
+                        <div class="genes-table-container">
+                            <table class="genes-table" id="genes-table">
+                                <thead>
+                                    <tr>
+                                        <th>Gene</th>
+                                        <th>Symbol</th>
+                                        <th>Mentions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="genes-tbody">
+                                    <!-- Dynamically populated -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Tab Content: Summaries -->
+                    <div class="tab-content" id="tab-summaries">
+                        <div class="summaries-list" id="summaries-list">
+                            <!-- Dynamically populated -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div class="empty-state" id="empty-state">
+                    <div class="empty-icon">🌱</div>
+                    <h3>Ready to Find Research Gaps</h3>
+                    <p>Enter a search query above to analyze genome-wide analysis articles and identify gaps in plant
+                        genomics research.</p>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>GAP Filler v1.0 • Powered by PubMed, OrthoDB & Local LLM</p>
+        </footer>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>
