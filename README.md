@@ -41,8 +41,10 @@ A desktop research tool that identifies knowledge gaps in plant genomics by anal
 
 <details>
 <summary>Click to view screenshots</summary>
+<img width="2498" height="1439" alt="Başlangıç Ekranı" src="https://github.com/user-attachments/assets/c729d48a-aa57-4098-8176-b88a61b6b5b0" />
+<img width="2498" height="1439" alt="First Scan" src="https://github.com/user-attachments/assets/f9ee723d-22e9-4f83-b283-cf7f11156f43" />
+<img width="2498" height="1439" alt="First Batch" src="https://github.com/user-attachments/assets/836c5aad-fb89-4ace-8fd6-c85082993b73" />
 
-*Add your screenshots here*
 
 </details>
 
