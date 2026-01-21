@@ -7,6 +7,18 @@ from flask_cors import CORS
 import sys
 import os
 
+# Fix for Windows console encoding (OSError: [Errno 22] Invalid argument)
+# This prevents crashes when printing UTF-8 characters (like in article titles) to the console
+if sys.platform == 'win32':
+    try:
+        # Check if stdout/stderr are attached to a terminal/console (have reconfigure)
+        if hasattr(sys.stdout, 'reconfigure'):
+            sys.stdout.reconfigure(encoding='utf-8')
+        if hasattr(sys.stderr, 'reconfigure'):
+            sys.stderr.reconfigure(encoding='utf-8')
+    except Exception as e:
+        print(f"Warning: Could not configure console encoding: {e}")
+
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
